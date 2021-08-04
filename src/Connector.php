@@ -5,7 +5,6 @@ namespace Flooris\FloorisShopwareApiIntegration;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use App\modules\ShopwareConnector\src\ShopwareApi;
 use Flooris\FloorisShopwareApiIntegration\clients\BulkClient;
 
 class Connector

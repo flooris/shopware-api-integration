@@ -1,6 +1,6 @@
 <?php
+namespace Flooris\FloorisShopwareApiIntegration;
 
-namespace App\modules\ShopwareConnector\src;
 
 use GuzzleHttp\Client;
 use Flooris\FloorisShopwareApiIntegration\clients\TaxClient;
@@ -15,6 +15,7 @@ use Flooris\FloorisShopwareApiIntegration\clients\SalesChannelClient;
 use Flooris\FloorisShopwareApiIntegration\clients\PropertyGroupClient;
 use Flooris\FloorisShopwareApiIntegration\clients\ProductFeaturesClient;
 use Flooris\FloorisShopwareApiIntegration\clients\ProductVisibilityClient;
+
 
 class ShopwareApi
 {

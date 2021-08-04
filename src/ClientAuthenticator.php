@@ -1,6 +1,6 @@
 <?php
 
-namespace App\modules\ShopwareConnector\src;
+namespace Flooris\FloorisShopwareApiIntegration;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;

@@ -1,5 +1,5 @@
 <?php
-namespace App\modules\ShopwareConnector\src;
+namespace Flooris\FloorisShopwareApiIntegration;
 
 class ShopwarApiServiceProvider
 {
