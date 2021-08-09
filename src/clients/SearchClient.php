@@ -284,6 +284,25 @@ class SearchClient
         );
     }
 
+    public function country(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $this->client = $this->shopwareApi->country();
+
+        return $this->sendRequest(
+            $term,
+            $this->client->baseUri(),
+            $this->client->modelClass(),
+            $this->client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+            $this->client->associations()
+        );
+    }
+
     public function order(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $this->client = $this->shopwareApi->order();
@@ -303,7 +322,7 @@ class SearchClient
         );
     }
 
-    public function addFilter(string $field, string $filterType, string $value): void
+    public function addFilter(string $field, string $filterType, ?string $value): SearchClient
     {
         if (! $this->filter) {
             $this->filter = [];
@@ -314,11 +333,42 @@ class SearchClient
             "type"  => $filterType,
             "value" => $value,
         ];
+
+        return $this;
+    }
+
+    public function addQuery(string $operator, string $filterType,array $queries)
+    {
+        $this->filter[] = [
+            "operator" => $operator,
+            "type"  => $filterType,
+            "queries" => $queries,
+        ];
+        return $this;
     }
 
     public function propertyGroups(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $this->client = $this->shopwareApi->propertyGroup();
+
+        return $this->sendRequest(
+            $term,
+            $this->client->baseUri(),
+            $this->client->modelClass(),
+            $this->client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+            $this->client->associations()
+        );
+    }
+
+    public function customers(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $this->client = $this->shopwareApi->customer();
 
         return $this->sendRequest(
             $term,
@@ -367,6 +417,7 @@ class SearchClient
                 "order"          => $sortOrder,
             ],
         ];
+
 
         return [
             "ids"              => $ids,

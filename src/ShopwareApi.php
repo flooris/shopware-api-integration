@@ -8,9 +8,11 @@ use Flooris\FloorisShopwareApiIntegration\clients\MediaClient;
 use Flooris\FloorisShopwareApiIntegration\clients\OrderClient;
 use Flooris\FloorisShopwareApiIntegration\clients\SearchClient;
 use Flooris\FloorisShopwareApiIntegration\clients\ProductClient;
+use Flooris\FloorisShopwareApiIntegration\clients\CountryClient;
 use Flooris\FloorisShopwareApiIntegration\clients\CategoryClient;
 use Flooris\FloorisShopwareApiIntegration\clients\PropertyClient;
 use Flooris\FloorisShopwareApiIntegration\clients\CurrencyClient;
+use Flooris\FloorisShopwareApiIntegration\clients\CustomerClient;
 use Flooris\FloorisShopwareApiIntegration\clients\SalesChannelClient;
 use Flooris\FloorisShopwareApiIntegration\clients\PropertyGroupClient;
 use Flooris\FloorisShopwareApiIntegration\clients\ProductFeaturesClient;
@@ -121,5 +123,15 @@ class ShopwareApi
     public function order(): OrderClient
     {
         return new OrderClient($this);
+    }
+
+    public function customer(): CustomerClient
+    {
+        return new CustomerClient($this);
+    }
+
+    public function country(): CountryClient
+    {
+        return new CountryClient($this);
     }
 }

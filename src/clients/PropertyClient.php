@@ -43,4 +43,9 @@ class PropertyClient extends AbstractBaseClient
     {
         return $this->getShopwareApi()->search()->properties(limit: null, paginated: false);
     }
+
+    public function findByOption(string $id)
+    {
+        return $this->getShopwareApi()->search()->addFilter("propertyGroup.options.id", "equalsAny", $id)->propertyGroups();
+    }
 }

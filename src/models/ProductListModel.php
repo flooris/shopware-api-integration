@@ -18,6 +18,7 @@ class ProductListModel extends AbstractModel
     public array $customFields;
     public ?Collection $media;
     public array $categories;
+    public ?array $optionIds;
 
     function handleResponse(): void
     {
@@ -30,6 +31,7 @@ class ProductListModel extends AbstractModel
         $this->availablePropertyIds = isset($response->propertyIds) ? $response->propertyIds : [];
         $this->customFields         = (array)$this->response->customFields;
         $this->categories           = $this->response->categories;
+        $this->optionIds            = $this->response->optionIds;
     }
 
     public function product(): contracts\Model

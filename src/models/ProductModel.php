@@ -20,6 +20,7 @@ class ProductModel extends AbstractModel
     public array $prices;
     public ?Collection $media;
     public ?string $featureSetId;
+    public ?array $optionIds;
 
     function handleResponse(): void
     {
@@ -34,6 +35,7 @@ class ProductModel extends AbstractModel
         $this->availablePropertyIds = isset($response->propertyIds) ? $response->propertyIds : [];
         $this->properties           = $response->properties ?? [];
         $this->customFields         = (array)$response->customFields;
+        $this->optionIds            = $response->optionIds;
         $this->mapProperties();
         $this->setCurrency();
     }

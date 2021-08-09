@@ -27,12 +27,19 @@ class ProductClient extends AbstractBaseClient
 
     public function variants(): Collection
     {
-        return $this->getShopwareApi()
-            ->search()
-            ->products(limit: null, paginated: false)
-            ->filter(function (ProductListModel $product) {
-                return $product->parentId;
-            });
+        return $this->getShopwareApi()->search()->addQuery("or", "not", [
+            [
+                "field" => "product.optionIds",
+                "type"  => "equals",
+                "value" => null,
+            ],
+            [
+                "field" => "product.parentId",
+                "type"  => "equals",
+                "value" => null,
+            ],
+        ],
+        )->products(limit: null, paginated: false);
     }
 
 

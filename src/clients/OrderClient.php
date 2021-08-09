@@ -10,7 +10,6 @@ use Flooris\FloorisShopwareApiIntegration\models\OrderModel;
 
 class OrderClient extends AbstractBaseClient
 {
-
     public function modelClass(): string
     {
         return OrderModel::class;
