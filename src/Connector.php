@@ -1,11 +1,11 @@
 <?php
 
+namespace Flooris\ShopwareApiIntegration;
 
-namespace Flooris\FloorisShopwareApiIntegration;
-
+use stdClass;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use Flooris\FloorisShopwareApiIntegration\clients\BulkClient;
+use Flooris\ShopwareApiIntegration\Clients\BulkClient;
 
 class Connector
 {
@@ -14,12 +14,11 @@ class Connector
     private const HTTP_PATCH = 'PATCH';
     private const HTTP_DELETE = 'DELETE';
 
-    public function __construct(private ShopwareApi $shopwareApi, private Client $httpClient)
+    public function __construct(private ShopwareApi $shopwareApi, private Client $httpClient, private array $instanceClientOptions = [])
     {
-
     }
 
-     public function bulk(): BulkClient
+    public function bulk(): BulkClient
     {
         return new BulkClient($this);
     }
@@ -33,14 +32,16 @@ class Connector
     {
         $defaultOptions = [
             RequestOptions::HEADERS     => [
-                'User-Agent'    => config('shopware.client-options.user-agent', 'flooris/shopware-api-integration'),
+                'User-Agent'    => config('shopware.instances.default.client-options.user-agent', 'flooris/shopware-api-integration'),
                 'Accept'        => 'application/json',
                 'Content-Type'  => 'application/json',
-                'authorization' => "Bearer " . $this->getShopwareApi()->getAuthenticator()->getBearerToken(),
+                'Authorization' => 'Bearer ' . $this->getShopwareApi()->getAuthenticator()->getBearerToken(),
             ],
             RequestOptions::SYNCHRONOUS => true,
             RequestOptions::DEBUG       => false,
         ];
+
+        $defaultOptions[RequestOptions::HEADERS] = array_merge($defaultOptions[RequestOptions::HEADERS], $this->instanceClientOptions);
 
         if (! $options) {
             return $defaultOptions;
@@ -71,35 +72,32 @@ class Connector
         return $options;
     }
 
-    public function get(string $uri, array $query = [], array $uriParameters = []): \stdClass
+    public function get(string $uri, array $query = [], array $uriParameters = []): stdClass
     {
         return $this->send(static::HTTP_GET, $this->buildUri($uri, $uriParameters), [], $query);
     }
 
-    public function post(string $uri, array $data, array $uriParameters = [], array $query = [], ?string $body = null, array $headers = []): \stdClass
+    public function post(string $uri, array $data, array $uriParameters = [], array $query = [], ?string $body = null, array $headers = []): stdClass
     {
         return $this->send(static::HTTP_POST, $this->buildUri($uri, $uriParameters), $data, $query, $body, $headers);
     }
 
-    public function patch(string $uri, array $data, array $uriParameters, array $query = [],): \stdClass
+    public function patch(string $uri, array $data, array $uriParameters, array $query = [],): stdClass
     {
         return $this->send(static::HTTP_PATCH, $this->buildUri($uri, $uriParameters), $data, $query);
     }
 
-
-    public function delete(string $url, array $uriParameters = [], array $query = []): \stdClass
+    public function delete(string $url, array $uriParameters = [], array $query = []): stdClass
     {
-       return $this->send(self::HTTP_DELETE, $this->buildUri($url, $uriParameters), null, $query);
+        return $this->send(self::HTTP_DELETE, $this->buildUri($url, $uriParameters), null, $query);
     }
 
-     private function buildUri(string $uri, array $uriParameters = []): string
+    private function buildUri(string $uri, array $uriParameters = []): string
     {
-        $uri = ltrim("$uri", '/');
-
-        return vsprintf($uri, $uriParameters);
+        return vsprintf(ltrim($uri, '/'), $uriParameters);
     }
 
-    private function decodeResponse($response): \stdClass
+    private function decodeResponse($response): stdClass
     {
         $response = $response->getBody()->getContents();
         if (! $response) {
@@ -109,7 +107,7 @@ class Connector
         return json_decode($response, false, 512, JSON_THROW_ON_ERROR);
     }
 
-    private function send(string $method, string $uri, ?array $data = null, ?array $query = null, ?string $body = null, array $headers = []): \stdClass
+    private function send(string $method, string $uri, ?array $data = null, ?array $query = null, ?string $body = null, array $headers = []): stdClass
     {
         if (empty($data)) {
             $data = null;

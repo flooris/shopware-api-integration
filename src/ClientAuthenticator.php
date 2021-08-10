@@ -1,6 +1,6 @@
 <?php
 
-namespace Flooris\FloorisShopwareApiIntegration;
+namespace Flooris\ShopwareApiIntegration;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
@@ -9,70 +9,41 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ClientAuthenticator
 {
+    const CLIENT_CACHE_KEY_TOKEN_BASE = 'SHOPWARE_API_TOKENS-';
 
-    private string $cacheKeyTokens = 'SHOPWARE_API_TOKENS';
-    private string $bearerToken;
-
-    public function __construct(private Client $httpClient)
+    public function __construct(private Connector $connector, private string $accessKeyId)
     {
-
     }
 
-    public function authenticate(string $clientId, string $clientSecret, bool $forceRenewTokens): void
+    public function authenticate(string $secretAccessKey, bool $forceRenewTokens): void
     {
-        if (Cache::has($this->cacheKeyTokens) && !$forceRenewTokens) {
-            $tokens = Cache::get($this->cacheKeyTokens);
-            $this->setBearerToken($tokens->access_token);
-
+        if (! $forceRenewTokens && Cache::has($this->getCacheKey())) {
             return;
         }
 
-        $loginBody = [
-            "grant_type"    => "client_credentials",
-            'client_id'     => $clientId,
-            'client_secret' => $clientSecret,
+        $loginDataArray = [
+            'grant_type'    => config('shopware.grant_type', 'client_credentials'),
+            'client_id'     => $this->accessKeyId,
+            'client_secret' => $secretAccessKey,
         ];
 
-        $options = [
-            RequestOptions::HEADERS     => [
-                'User-Agent'   => config('shopware.client-options.user-agent', 'flooris/shopware-api'),
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json',
-            ],
-            RequestOptions::JSON        => $loginBody,
-            RequestOptions::SYNCHRONOUS => true,
-            RequestOptions::DEBUG       => true,
-            "allow_redirects" => [
-                "max" => 5,
-            ]
-        ];
+        $responseObject = $this->connector->post('oauth/token', $loginDataArray);
 
-        try {
-            $response = $this->httpClient->request("POST", 'oauth/token', $options);
-        } catch (GuzzleException $exception) {
-            throw $exception;
+        if (! isset($responseObject->access_token)) {
+            throw new \Exception('Access token could not be found in the response object: ' .
+                                 json_encode($responseObject));
         }
 
-        $tokens = json_decode($response->getBody());
-
-        $this->setBearerToken($tokens->access_token);
-
-        $lifeTimeSeconds = (600); // 10 min
-        Cache::set($this->cacheKeyTokens, $tokens, $lifeTimeSeconds);
+        Cache::set($this->getCacheKey(), $responseObject->access_token, $responseObject->expires_in);
     }
 
-    public function setCacheKeyTokens(string $cacheKeyTokens): void
+    public function getBearerToken(): ?string
     {
-        $this->cacheKeyTokens = $cacheKeyTokens;
+        return Cache::get($this->getCacheKey(), null);
     }
 
-    public function getBearerToken(): string
+    public function getCacheKey(): string
     {
-        return $this->bearerToken;
-    }
-
-    public function setBearerToken($bearerToken): void
-    {
-        $this->bearerToken = $bearerToken;
+        return self::CLIENT_CACHE_KEY_TOKEN_BASE . $this->accessKeyId;
     }
 }

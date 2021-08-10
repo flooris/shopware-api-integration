@@ -1,11 +1,15 @@
 <?php
 
 return [
-    "grant_type"     => "client_credentials",
-    'hostname'       => env('SHOPWARE_HOSTNAME', ''),
-    "client_id"      => env("SHOPWARE_CLIENT_ID", ""),
-    "client_secret"  => env("SHOPWARE_CLIENT_SECRET", ""),
-    "client-options" => [
-        "user-agent" => "flooris/shopware-api",
+    'grant_type' => 'client_credentials',
+    'instances'  => [
+        'default' => [
+            'hostname'            => env('SHOPWARE_HOSTNAME', ''),
+            'access_key_id'       => env('SHOPWARE_ACCESS_KEY_ID', ''),
+            'secret_access_key'   => env('SHOPWARE_SECRET_ACCESS_KEY', ''),
+            'http-header-options' => [
+                'User-Agent' => 'flooris/shopware-api-integration',
+            ],
+        ],
     ],
 ];

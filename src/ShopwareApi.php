@@ -1,23 +1,22 @@
 <?php
-namespace Flooris\FloorisShopwareApiIntegration;
 
+namespace Flooris\ShopwareApiIntegration;
 
 use GuzzleHttp\Client;
-use Flooris\FloorisShopwareApiIntegration\clients\TaxClient;
-use Flooris\FloorisShopwareApiIntegration\clients\MediaClient;
-use Flooris\FloorisShopwareApiIntegration\clients\OrderClient;
-use Flooris\FloorisShopwareApiIntegration\clients\SearchClient;
-use Flooris\FloorisShopwareApiIntegration\clients\ProductClient;
-use Flooris\FloorisShopwareApiIntegration\clients\CountryClient;
-use Flooris\FloorisShopwareApiIntegration\clients\CategoryClient;
-use Flooris\FloorisShopwareApiIntegration\clients\PropertyClient;
-use Flooris\FloorisShopwareApiIntegration\clients\CurrencyClient;
-use Flooris\FloorisShopwareApiIntegration\clients\CustomerClient;
-use Flooris\FloorisShopwareApiIntegration\clients\SalesChannelClient;
-use Flooris\FloorisShopwareApiIntegration\clients\PropertyGroupClient;
-use Flooris\FloorisShopwareApiIntegration\clients\ProductFeaturesClient;
-use Flooris\FloorisShopwareApiIntegration\clients\ProductVisibilityClient;
-
+use Flooris\ShopwareApiIntegration\Clients\TaxClient;
+use Flooris\ShopwareApiIntegration\Clients\MediaClient;
+use Flooris\ShopwareApiIntegration\Clients\OrderClient;
+use Flooris\ShopwareApiIntegration\Clients\SearchClient;
+use Flooris\ShopwareApiIntegration\Clients\ProductClient;
+use Flooris\ShopwareApiIntegration\Clients\CountryClient;
+use Flooris\ShopwareApiIntegration\Clients\CategoryClient;
+use Flooris\ShopwareApiIntegration\Clients\PropertyClient;
+use Flooris\ShopwareApiIntegration\Clients\CurrencyClient;
+use Flooris\ShopwareApiIntegration\Clients\CustomerClient;
+use Flooris\ShopwareApiIntegration\Clients\SalesChannelClient;
+use Flooris\ShopwareApiIntegration\Clients\PropertyGroupClient;
+use Flooris\ShopwareApiIntegration\Clients\ProductFeaturesSetClient;
+use Flooris\ShopwareApiIntegration\Clients\ProductVisibilityClient;
 
 class ShopwareApi
 {
@@ -25,52 +24,31 @@ class ShopwareApi
     private Client $httpClient;
     private Connector $connector;
 
-    public function __construct(string $hostname, string $clientId, string $clientSecret, ?array $httpClientConfig = null, bool $forceRenewTokens = false)
+    public function __construct(string $hostname, string $accessKeyId, string $secretAccessKey, array $instanceClientOptions = [], ?array $httpClientConfig = null, bool $forceRenewTokens = false)
     {
         $this->setHttpClient($hostname, $httpClientConfig);
-        $this->loginHttpClient($this->httpClient, $clientId, $clientSecret, $forceRenewTokens);
-        $this->connector = new Connector($this, $this->httpClient);
+        $this->connector = new Connector($this, $this->httpClient, $instanceClientOptions);
+
+        $this->login($accessKeyId, $secretAccessKey, $forceRenewTokens);
     }
 
-    private function setHttpClient(string $hostname, ?array $httpClientConfig = null): void
+    private function login(string $accessKeyId, string $secretAccessKey, bool $forceRenewTokens): void
     {
-        if (! $httpClientConfig) {
-            $httpClientConfig = [];
-        }
-
-        $httpClientConfig['base_uri'] = $hostname;
-
-        $this->httpClient = new Client($httpClientConfig);
+        $this->clientAuthenticator = new ClientAuthenticator($this->connector, $accessKeyId);
+        $this->clientAuthenticator->authenticate($secretAccessKey, $forceRenewTokens);
     }
 
-    public function getHttpClient(): Client
-    {
-        return $this->httpClient;
-    }
-
-
-    public function getAuthenticator(): ClientAuthenticator
-    {
-        return $this->clientAuthenticator;
-    }
-
-    private function loginHttpClient(Client $client, string $clientId, string $clientSecret, bool $forceRenewTokens): void
-    {
-        $this->clientAuthenticator = new ClientAuthenticator($client);
-        $this->clientAuthenticator->authenticate($clientId, $clientSecret, $forceRenewTokens);
-    }
-
-    public function products(): ProductClient
+    public function product(): ProductClient
     {
         return new ProductClient($this);
     }
 
-    public function productFeatureSet(): ProductFeaturesClient
+    public function productFeatureSet(): ProductFeaturesSetClient
     {
-        return new ProductFeaturesClient($this);
+        return new ProductFeaturesSetClient($this);
     }
 
-    public function properties(): PropertyClient
+    public function property(): PropertyClient
     {
         return new PropertyClient($this);
     }
@@ -85,12 +63,12 @@ class ShopwareApi
         return new ProductVisibilityClient($this);
     }
 
-    public function salesChannels(): SalesChannelClient
+    public function salesChannel(): SalesChannelClient
     {
         return new SalesChannelClient($this);
     }
 
-    public function categories(): CategoryClient
+    public function category(): CategoryClient
     {
         return new CategoryClient($this);
     }
@@ -98,11 +76,6 @@ class ShopwareApi
     public function media(?string $mediaEndpoint = null): MediaClient
     {
         return new MediaClient($this, $mediaEndpoint);
-    }
-
-    public function connector(): Connector
-    {
-        return $this->connector;
     }
 
     public function search(): SearchClient
@@ -133,5 +106,26 @@ class ShopwareApi
     public function country(): CountryClient
     {
         return new CountryClient($this);
+    }
+
+    public function connector(): Connector
+    {
+        return $this->connector;
+    }
+
+    private function setHttpClient(string $hostname, ?array $httpClientConfig = null): void
+    {
+        if (! $httpClientConfig) {
+            $httpClientConfig = [];
+        }
+
+        $httpClientConfig['base_uri'] = $hostname;
+
+        $this->httpClient = new Client($httpClientConfig);
+    }
+
+    public function getAuthenticator(): ClientAuthenticator
+    {
+        return $this->clientAuthenticator;
     }
 }
