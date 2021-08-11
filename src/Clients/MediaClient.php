@@ -3,44 +3,31 @@
 namespace Flooris\ShopwareApiIntegration\Clients;
 
 use stdClass;
-use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Flooris\ShopwareApiIntegration\ShopwareApi;
 use Flooris\ShopwareApiIntegration\Models\MediaModel;
-use Flooris\ShopwareApiIntegration\Models\MediaFolderModel;
-use Flooris\ShopwareApiIntegration\Models\ProductMediaModel;
 
 class MediaClient extends AbstractBaseClient
 {
-    protected string $endpoint;
-
-    protected string $modelClass;
-
-    public function __construct(ShopwareApi $shopwareApi, ?string $modelClass = null, ?string $modelListClass = null)
-    {
-        $this->setMediaModelAndEndpoint(null);
-        parent::__construct($shopwareApi, $modelClass, $modelListClass);
-    }
-
     public function modelClass(): string
     {
-        return $this->modelClass;
+        return MediaModel::class;
     }
 
     public function listModelClass(): string
     {
-        return $this->listModelClass;
+        return MediaModel::class;
     }
 
     public function baseUri(): string
     {
-        return $this->endpoint;
+        return 'media';
     }
 
     public function showUri(): string
     {
-        return "{$this->endpoint}/%s";
+        return 'media/%s';
     }
 
     public function associations(): ?array
@@ -50,100 +37,40 @@ class MediaClient extends AbstractBaseClient
 
     public function list(int $limit = 25, int $page = 1): stdClass
     {
-        return match ($this->endpoint) {
-            'product-media' => $this->getShopwareApi()->search()->productMedia(limit: $limit, page: $page),
-            'media-folder' => $this->getShopwareApi()->search()->mediaFolder(limit: $limit, page: $page),
-            default => $this->getShopwareApi()->search()->media(limit: $limit, page: $page),
-        };
+        return $this->getShopwareApi()->search()->media(limit: $limit, page: $page);
     }
 
     public function all(): Collection
     {
-        return match ($this->endpoint) {
-            'product-media' => $this->getShopwareApi()->search()->productMedia(limit: null, paginated: false),
-            'media-folder' => $this->getShopwareApi()->search()->mediaFolder(limit: null, paginated: false),
-            default => $this->getShopwareApi()->search()->media(limit: null, paginated: false),
-        };
+        return $this->getShopwareApi()->search()->media(limit: null, paginated: false);
     }
 
-    public function setMediaModelAndEndpoint(?string $endpoint): void
+    public function upload(string $mediaId, string $image, string $fileName): stdClass
     {
-        switch ($endpoint) {
-            case 'product-media':
-                $this->modelClass     = ProductMediaModel::class;
-                $this->listModelClass = ProductMediaModel::class;
-                $this->endpoint       = 'product-media';
-                break;
-            case 'media-folder':
-                $this->modelClass     = MediaFolderModel::class;
-                $this->listModelClass = MediaFolderModel::class;
-                $this->endpoint       = 'media-folder';
-                break;
-            default:
-                $this->modelClass     = MediaModel::class;
-                $this->listModelClass = MediaModel::class;
-                $this->endpoint       = 'media';
-                break;
-        }
+        $name      = explode('.', $fileName)[0];
+        $extension = explode('.', $fileName)[1];
+
+        return $this->getShopwareApi()
+            ->connector()
+            ->post('_action/media/%s/upload', [], [$mediaId], [
+                'extension' => $extension,
+                'fileName'  => $name,
+                '_response' => true,
+            ], $image, [
+                'Content-Type' => "image/{$fileName[1]}",
+            ]);
     }
 
-    /**
-     * @todo Separate these models into their own clients
-     */
-
-    //    public function addProductImage(string $productId, string $mediaId): ProductMediaModel
-    //    {
-    //        $productMedia = $this->getShopwareApi()->media();
-    //        $productMedia->setMediaModelAndEndpoint('product-media');
-    //        $response = $this->getShopwareApi()->connector()->post($productMedia->baseUri(), [
-    //            'productId' => $productId,
-    //            'mediaId'   => $mediaId,
-    //        ], [], ['_response' => true]);
-    //
-    //        return new $productMedia->modelClass($this, $response);
-    //    }
-    //
-    //    public function addImageToMediaFolder(string $folderId, bool $localImage = true, ?string $filename = null, ?string $url = null)
-    //    {
-    //        if ($filename) {
-    //            $image = Storage::get("public/images/{$filename}");
-    //        } else if (! $localImage) {
-    //            $filename = (string)(time() . image_type_to_extension(exif_imagetype($url)));
-    //            $image    = file_get_contents($url);
-    //        } else {
-    //            throw new Exception('either you have a local image with a filename, or a url to an image');
-    //        }
-    //
-    //        $this->setMediaModelAndEndpoint(null);
-    //        $mediaItem = new $this->modelClass(
-    //            $this,
-    //            $this->getShopwareApi()->connector()->post($this->endpoint, [
-    //                'mediaFolderId' => $folderId,
-    //            ], [], ['_response' => true,]
-    //            ),
-    //        );
-    //        $this->upload($mediaItem->id, $image, $filename);
-    //
-    //        return $mediaItem;
-    //    }
-    //
-    //    public function upload(string $mediaId, string $image, string $fileName): stdClass
-    //    {
-    //        $name      = explode('.', $fileName)[0];
-    //        $extension = explode('.', $fileName)[1];
-    //
-    //        return $this->getShopwareApi()
-    //            ->connector()
-    //            ->post('_action/media/%s/upload', [], [$mediaId], [
-    //                'extension' => $extension,
-    //                'fileName'  => $name,
-    //                '_response' => true,
-    //            ], $image, [
-    //                'Accept'       => 'application/vnd.api+json',
-    //                'Content-Type' => "image/{$fileName[1]}",
-    //            ]);
-    //
-    //    }
+    public function createMediaItem(string $mediaFolderId)
+    {
+        return new $this->modelClass(
+            $this,
+            $this->getShopwareApi()->connector()->post($this->baseUri(), [
+                'mediaFolderId' => $mediaFolderId,
+            ], [], ['_response' => true,]
+            )->data,
+        );
+    }
 
     public function findByName(string $name)
     {

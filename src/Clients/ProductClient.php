@@ -103,24 +103,22 @@ class ProductClient extends AbstractBaseClient
         string $name,
         string $description,
         string $sku,
-        int    $grossPrice,
-        ?int   $netPrice,
+        int $grossPrice,
+        ?int $netPrice,
         string $currencyId,
         string $taxId,
-        int    $stock = 1,
-        array  $rawProductData = [],
+        int $stock = 1,
+        array $rawProductData = [],
     )
     {
-        /**
-         * @todo Add linked price to this.
-         * There is an endpoint available to calculate this, incase it doesn't calculate it when it's linked
-         * api/_action/calculate-price
-         * Fields:
-         *  - currencyId
-         *  - output
-         *  - price
-         *  - taxId
-         */
+        $linkedprices = $netPrice === null;
+
+        if ($netPrice === null) {
+            $netPrice = $this->getShopwareApi()
+                ->calculatedTax()
+                ->calculateNetPrice($currencyId, $grossPrice, $taxId)->priceWithoutTax;
+        }
+
         $response = $this->getShopwareApi()->connector()->post($this->baseUri(), array_merge([
             'name'          => $name,
             'description'   => $description,
@@ -132,7 +130,7 @@ class ProductClient extends AbstractBaseClient
                 [
                     'currencyId' => $currencyId,
                     'gross'      => $grossPrice,
-                    'linked'     => false,
+                    'linked'     => $linkedprices,
                     'net'        => $netPrice,
                 ],
             ],

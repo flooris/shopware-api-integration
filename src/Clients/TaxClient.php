@@ -36,18 +36,11 @@ class TaxClient extends AbstractBaseClient
 
     public function list(int $limit = 25, int $page = 1): stdClass
     {
-        /**
-         * @todo Implement this feature
-         */
-        return (object)['feature not implemented'];
+        return $this->getShopwareApi()->search()->tax(limit: $limit, page: $page);
     }
 
     public function all(): Collection
     {
-        return collect($this->getShopwareApi()
-            ->connector()
-            ->get($this->baseUri())->data)->map(function (stdClass $tax) {
-            return new $this->modelClass($this, $tax);
-        });
+        return $this->getShopwareApi()->search()->tax(limit: null, paginated: false);
     }
 }
