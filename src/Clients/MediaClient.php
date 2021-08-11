@@ -4,8 +4,6 @@ namespace Flooris\ShopwareApiIntegration\Clients;
 
 use stdClass;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
-use Flooris\ShopwareApiIntegration\ShopwareApi;
 use Flooris\ShopwareApiIntegration\Models\MediaModel;
 
 class MediaClient extends AbstractBaseClient
@@ -45,6 +43,7 @@ class MediaClient extends AbstractBaseClient
         return $this->getShopwareApi()->search()->media(limit: null, paginated: false);
     }
 
+    //todo improve upload function
     public function upload(string $mediaId, string $image, string $fileName): stdClass
     {
         $name      = explode('.', $fileName)[0];

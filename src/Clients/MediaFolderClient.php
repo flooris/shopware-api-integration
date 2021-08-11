@@ -44,6 +44,7 @@ class MediaFolderClient extends AbstractBaseClient
         return $this->getShopwareApi()->search()->mediaFolder(limit: null, paginated: false);
     }
 
+    //todo improve addImageToMediaFolder
     public function addImageToMediaFolder(string $folderId, ?string $filename = null, ?string $image = null, ?string $url = null)
     {
         if (! $filename && ! $image && ! $url) {
