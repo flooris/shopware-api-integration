@@ -13,10 +13,13 @@ use Flooris\ShopwareApiIntegration\Clients\CategoryClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyClient;
 use Flooris\ShopwareApiIntegration\Clients\CurrencyClient;
 use Flooris\ShopwareApiIntegration\Clients\CustomerClient;
+use Flooris\ShopwareApiIntegration\Clients\MediaFolderClient;
 use Flooris\ShopwareApiIntegration\Clients\SalesChannelClient;
+use Flooris\ShopwareApiIntegration\Clients\ProductMediaClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyGroupClient;
-use Flooris\ShopwareApiIntegration\Clients\ProductFeaturesSetClient;
+use Flooris\ShopwareApiIntegration\Clients\CalculatedTaxClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductVisibilityClient;
+use Flooris\ShopwareApiIntegration\Clients\ProductFeaturesSetClient;
 
 class ShopwareApi
 {
@@ -73,9 +76,19 @@ class ShopwareApi
         return new CategoryClient($this);
     }
 
-    public function media(?string $mediaEndpoint = null): MediaClient
+    public function media(): MediaClient
     {
-        return new MediaClient($this, $mediaEndpoint);
+        return new MediaClient($this);
+    }
+
+    public function mediaFolder(): MediaFolderClient
+    {
+        return new MediaFolderClient($this);
+    }
+
+    public function productMedia(): ProductMediaClient
+    {
+        return new ProductMediaClient($this);
     }
 
     public function search(): SearchClient
@@ -91,6 +104,11 @@ class ShopwareApi
     public function tax(): TaxClient
     {
         return new TaxClient($this);
+    }
+
+    public function calculatedTax(): CalculatedTaxClient
+    {
+        return new CalculatedTaxClient(shopwareApi: $this);
     }
 
     public function order(): OrderClient

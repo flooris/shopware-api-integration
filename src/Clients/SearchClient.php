@@ -135,8 +135,7 @@ class SearchClient
 
     public function productMedia(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
-        $client = $this->shopwareApi->media();
-        $client->setMediaModelAndEndpoint('product-media');
+        $client = $this->shopwareApi->productMedia();
 
         $modelClass = ($limit === 1) ? $client->modelClass() : $client->ListModelClass();
 
@@ -155,8 +154,7 @@ class SearchClient
 
     public function mediaFolder(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
-        $client = $this->shopwareApi->media();
-        $client->setMediaModelAndEndpoint('media-folder');
+        $client = $this->shopwareApi->mediaFolder();
 
         $modelClass = ($limit === 1) ? $client->modelClass() : $client->ListModelClass();
 
@@ -176,7 +174,6 @@ class SearchClient
     public function media(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $client = $this->shopwareApi->media();
-        $client->setMediaModelAndEndpoint('media');
 
         $modelClass = ($limit === 1) ? $client->modelClass() : $client->ListModelClass();
 
@@ -307,6 +304,23 @@ class SearchClient
     public function customers(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $client = $this->shopwareApi->customer();
+
+        return $this->sendRequest(
+            $term,
+            $client->modelClass(),
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+    }
+
+    public function tax(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $client = $this->shopwareApi->tax();
 
         return $this->sendRequest(
             $term,
