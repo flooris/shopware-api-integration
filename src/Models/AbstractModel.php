@@ -11,7 +11,7 @@ abstract class AbstractModel implements Model
     public function __construct(private Client $client, ?stdClass $response = null)
     {
         if ($response) {
-            $this->handleResponse($response);
+            $this->handleResponse($response->data ?? $response);
         }
     }
 
