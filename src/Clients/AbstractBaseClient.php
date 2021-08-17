@@ -4,6 +4,7 @@ namespace Flooris\ShopwareApiIntegration\Clients;
 
 use stdClass;
 use Illuminate\Support\Collection;
+use GuzzleHttp\Exception\GuzzleException;
 use Flooris\ShopwareApiIntegration\ShopwareApi;
 use Flooris\ShopwareApiIntegration\Models\Contracts\Model;
 use Flooris\ShopwareApiIntegration\Models\Contracts\Client;
@@ -38,6 +39,17 @@ abstract class AbstractBaseClient implements Client
     public function find(string $id): Model
     {
         return $this->getShopwareApi()->search()->custom(client: $this, id: $id)->first();
+    }
+
+    public function destroy(string $id): bool
+    {
+        try {
+            $this->getShopwareApi()->connector()->delete($this->showUri(), [$id]);
+        }catch (GuzzleException $e){
+            return false;
+        }
+
+        return true;
     }
 
     abstract public function list(int $limit = 25, int $page = 1): stdClass;

@@ -31,4 +31,9 @@ abstract class AbstractModel implements Model
     {
         return $this->client->find($id);
     }
+
+    public function destroy($id): bool
+    {
+        return $this->client->destroy($id);
+    }
 }

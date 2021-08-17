@@ -16,4 +16,6 @@ interface BaseClient
     public function find(string $id): Model;
 
     public function getShopwareApi(): ShopwareApi;
+
+    public function destroy(string $id): bool;
 }
