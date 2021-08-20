@@ -20,6 +20,7 @@ class OrderModel extends AbstractModel
     public function handleResponse(stdClass $response): void
     {
         $this->id             = $response->id;
+        $this->versionId      = $response->versionId;
         $this->customer       = $response->orderCustomer;
         $this->orderNumber    = $response->orderNumber;
         $this->saleChannel    = $response->salesChannel->name;

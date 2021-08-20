@@ -24,7 +24,7 @@ class ProductModel extends AbstractModel
     public function handleResponse(stdClass $response): void
     {
         $this->id                   = $response->id;
-        $this->parentVersionId      = $response->parentVersionId;
+        $this->parentVersionId      = $response->versionId;
         $this->parentId             = $response->parentId;
         $this->sku                  = $response->productNumber;
         $this->name                 = $response->name;
