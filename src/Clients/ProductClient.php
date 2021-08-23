@@ -103,12 +103,12 @@ class ProductClient extends AbstractBaseClient
         string $name,
         string $description,
         string $sku,
-        int $grossPrice,
-        ?int $netPrice,
+        int    $grossPrice,
+        ?int   $netPrice,
         string $currencyId,
         string $taxId,
-        int $stock = 1,
-        array $rawProductData = [],
+        int    $stock = 1,
+        array  $rawProductData = [],
     )
     {
         $linkedprices = $netPrice === null;
@@ -144,7 +144,7 @@ class ProductClient extends AbstractBaseClient
 
     public function updateCategory(Collection $products, Collection $categories): stdClass
     {
-        $payload = $products->map(function (ProductListModel $product) use ($categories) {
+        $payload = $products->map(function ($product) use ($categories) {
             return [
                 'id'         => $product->id,
                 'categories' => $categories->map(function ($category) {
@@ -156,6 +156,45 @@ class ProductClient extends AbstractBaseClient
         })->toArray();
 
         return $this->updateBulk($payload);
+    }
+
+    public function upsertProperties(string $productId, array $optionIds)
+    {
+        $payload = [
+            [
+                'id'         => $productId,
+                'properties' => [],
+            ],
+        ];
+
+        foreach ($optionIds as $optionId) {
+            $payload[0]['properties'][] = [
+                'id' => $optionId,
+            ];
+        }
+
+        $data = $this->getShopwareApi()
+            ->connector()
+            ->bulk()
+            ->update($payload, 'product');
+
+        return $data->data[0]->product[0];
+    }
+
+    public function deleteProperties(string $productId, array $optionIds)
+    {
+        $payload = [];
+        foreach ($optionIds as $optionId) {
+            $payload[] = [
+                'optionId'  => $optionId,
+                'productId' => $productId,
+            ];
+        }
+
+        $data = $this->getShopwareApi()
+            ->connector()
+            ->bulk()
+            ->delete($payload, 'product_property');
     }
 
     public function updateBulk(array $payload, string $entity = 'product'): stdClass

@@ -335,6 +335,23 @@ class SearchClient
         );
     }
 
+    public function tag(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $client = $this->shopwareApi->tag();
+
+        return $this->sendRequest(
+            $term,
+            $client->modelClass(),
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+    }
+
     /**
      * string $type =  $clients->baseUri(),,
      * string $modelClass = $clients->modelClass(),,

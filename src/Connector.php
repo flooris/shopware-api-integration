@@ -82,7 +82,7 @@ class Connector
         return $this->send(static::HTTP_POST, $this->buildUri($uri, $uriParameters), $data, $query, $body, $headers);
     }
 
-    public function patch(string $uri, array $data, array $uriParameters, array $query = [],): stdClass
+    public function patch(string $uri, array $data, array $uriParameters, array $query = []): stdClass
     {
         return $this->send(static::HTTP_PATCH, $this->buildUri($uri, $uriParameters), $data, $query);
     }

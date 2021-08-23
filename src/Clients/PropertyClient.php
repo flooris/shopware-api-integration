@@ -20,7 +20,12 @@ class PropertyClient extends AbstractBaseClient
 
     public function showUri(): string
     {
-        return 'property-group/%s';
+        return 'property-group/%s/options/%s';
+    }
+
+    public function createUri(): string
+    {
+        return 'property-group/%s/options';
     }
 
     public function listModelClass(): string
@@ -49,5 +54,39 @@ class PropertyClient extends AbstractBaseClient
             ->search()
             ->addFilter('propertyGroup.options.id', 'equalsAny', $id)
             ->propertyGroups();
+    }
+
+    public function update(string $groupId, string $id, array $changes): PropertyModel
+    {
+        $response = $this->getShopwareApi()
+            ->connector()
+            ->patch(
+                $this->showUri(),
+                $changes,
+                [$groupId, $id],
+                ['_response' => true]
+            );
+
+        return new $this->modelClass($this, $response);
+    }
+
+    public function create(string $groupId, string $name, ?string $id = null)
+    {
+        $payload = [
+            'groupId' => $groupId,
+            'name'    => $name,
+        ];
+
+        if ($id) {
+            $payload['id'] = $id;
+        }
+
+        return $this->getShopwareApi()
+            ->connector()
+            ->post(
+                $this->createUri(),
+                $payload,
+                [$groupId]
+            );
     }
 }

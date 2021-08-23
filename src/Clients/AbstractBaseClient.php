@@ -36,7 +36,7 @@ abstract class AbstractBaseClient implements Client
         return $this->shopwareApi;
     }
 
-    public function find(string $id): Model
+    public function find(string $id): ?Model
     {
         return $this->getShopwareApi()->search()->custom(client: $this, id: $id)->first();
     }

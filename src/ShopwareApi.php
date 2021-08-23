@@ -4,6 +4,7 @@ namespace Flooris\ShopwareApiIntegration;
 
 use GuzzleHttp\Client;
 use Flooris\ShopwareApiIntegration\Clients\TaxClient;
+use Flooris\ShopwareApiIntegration\Clients\TagClient;
 use Flooris\ShopwareApiIntegration\Clients\MediaClient;
 use Flooris\ShopwareApiIntegration\Clients\OrderClient;
 use Flooris\ShopwareApiIntegration\Clients\SearchClient;
@@ -124,6 +125,11 @@ class ShopwareApi
     public function country(): CountryClient
     {
         return new CountryClient($this);
+    }
+
+    public function tag(): TagClient
+    {
+        return new TagClient($this);
     }
 
     public function connector(): Connector

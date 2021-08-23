@@ -4,7 +4,7 @@ namespace Flooris\ShopwareApiIntegration\Models;
 
 use stdClass;
 
-class PropertyModel extends AbstractModel
+class TagModel extends AbstractModel
 {
     public string $id;
     public string $name;

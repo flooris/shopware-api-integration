@@ -26,4 +26,15 @@ class BulkClient
             ],
         ]);
     }
+
+    public function delete(array $payload, string $entity = 'product_property'): stdClass
+    {
+        return $this->connector->post($this->baseUri(), [
+            [
+                'action'  => 'delete',
+                'entity'  => $entity,
+                'payload' => $payload,
+            ],
+        ]);
+    }
 }

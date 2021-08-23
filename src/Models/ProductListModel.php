@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class ProductListModel extends AbstractModel
 {
     public string $id;
-    public string $parentVersionId;
+    public string $versionId;
     public ?string $parentId;
     public string $sku;
     public ?string $name;
@@ -22,7 +22,7 @@ class ProductListModel extends AbstractModel
     public function handleResponse(stdClass $response): void
     {
         $this->id                   = $response->id;
-        $this->parentVersionId      = $response->versionId;
+        $this->versionId            = $response->versionId;
         $this->parentId             = $response->parentId;
         $this->sku                  = $response->productNumber;
         $this->name                 = $response->name;

@@ -13,7 +13,7 @@ interface BaseClient
 
     public function showUri(): string;
 
-    public function find(string $id): Model;
+    public function find(string $id): ?Model;
 
     public function getShopwareApi(): ShopwareApi;
 
