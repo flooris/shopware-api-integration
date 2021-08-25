@@ -14,6 +14,7 @@ class OrderModel extends AbstractModel
     public array $deliveries;
     public array $orderValue;
     public array $orderLineItems;
+    public ?string $updatedAt;
     public string $createdAt;
     public ?array $transactions;
 
@@ -33,6 +34,7 @@ class OrderModel extends AbstractModel
             'totalAmount' => $response->amountTotal,
         ];
         $this->transactions   = $response->transactions;
+        $this->updatedAt      = $response->updatedAt;
         $this->createdAt      = $response->createdAt;
     }
 }
