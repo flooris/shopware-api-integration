@@ -12,6 +12,6 @@ class TagModel extends AbstractModel
     public function handleResponse(stdClass $response): void
     {
         $this->id      = $response->id;
-        $this->name    = $response->name;
+        $this->name    = $response->name ?? $response->translated?->name;
     }
 }

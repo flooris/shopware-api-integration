@@ -14,8 +14,8 @@ class CurrencyModel extends AbstractModel
     public function handleResponse(stdClass $response): void
     {
         $this->id        = $response->id;
-        $this->name      = $response->name;
-        $this->nameShort = $response->shortName;
+        $this->name      = $response->name ?? $response->translated?->name;
+        $this->nameShort = $response->shortName ?? $response->translated?->shortName;
         $this->symbol    = $response->symbol;
     }
 }

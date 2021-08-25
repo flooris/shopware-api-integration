@@ -28,7 +28,7 @@ class ShopwareApi
     private Client $httpClient;
     private Connector $connector;
 
-    public function __construct(string $hostname, string $accessKeyId, string $secretAccessKey, array $instanceClientOptions = [], ?array $httpClientConfig = null, bool $forceRenewTokens = false)
+    public function __construct(public string $hostname, string $accessKeyId, string $secretAccessKey, public string $languageId, array $instanceClientOptions = [], ?array $httpClientConfig = null, bool $forceRenewTokens = false)
     {
         $this->setHttpClient($hostname, $httpClientConfig);
         $this->connector = new Connector($this, $this->httpClient, $instanceClientOptions);

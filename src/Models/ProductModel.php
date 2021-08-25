@@ -32,13 +32,13 @@ class ProductModel extends AbstractModel
         $this->versionId            = $response->versionId;
         $this->parentId             = $response->parentId;
         $this->sku                  = $response->productNumber;
-        $this->name                 = $response->name;
-        $this->description          = $response->description;
+        $this->name                 = $response->name ?? $response->translated?->name;
+        $this->description          = $response->description ?? $response->translated?->description;
         $this->featureSet           = $response->featureSet;
         $this->featureSetId         = $response->featureSetId;
         $this->availablePropertyIds = $response->propertyIds ?? [];
         $this->properties           = $response->properties ?? [];
-        $this->customFields         = (array)$response->customFields;
+        $this->customFields         = $response->customFields ? (array)$response->customFields : (array)$response->translated?->customFields;
         $this->optionIds            = $response->optionIds;
         $this->categoryTree         = $response->categoryTree;
         $this->categories           = $response->categories;

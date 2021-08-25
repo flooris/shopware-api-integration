@@ -32,10 +32,11 @@ class Connector
     {
         $defaultOptions = [
             RequestOptions::HEADERS     => [
-                'User-Agent'    => config('shopware.instances.default.client-options.user-agent', 'flooris/shopware-api-integration'),
-                'Accept'        => 'application/json',
-                'Content-Type'  => 'application/json',
-                'Authorization' => 'Bearer ' . $this->getShopwareApi()->getAuthenticator()->getBearerToken(),
+                'User-Agent'     => config('shopware.instances.default.client-options.user-agent', 'flooris/shopware-api-integration'),
+                'Accept'         => 'application/json',
+                'Content-Type'   => 'application/json',
+                'Authorization'  => 'Bearer ' . $this->getShopwareApi()->getAuthenticator()->getBearerToken(),
+                'sw-language-id' => $this->shopwareApi->languageId,
             ],
             RequestOptions::SYNCHRONOUS => true,
             RequestOptions::DEBUG       => false,

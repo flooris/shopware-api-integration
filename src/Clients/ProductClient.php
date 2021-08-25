@@ -177,8 +177,6 @@ class ProductClient extends AbstractBaseClient
             ->connector()
             ->bulk()
             ->update($payload, 'product');
-
-        return $data->data[0]->product[0];
     }
 
     public function deleteProperties(string $productId, array $optionIds)
