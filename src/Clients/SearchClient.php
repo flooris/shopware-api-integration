@@ -451,8 +451,8 @@ class SearchClient
     {
         $data = isset($response->data) ? collect($response->data) : collect($response);
 
-        $data = $data->map(function ($responseItem) use ($modelClass, $client) {
-            return new $modelClass($client, $responseItem);
+        $data = $data->map(function ($responseItem) use ($modelClass) {
+            return new $modelClass($responseItem);
         });
 
         if ($paginated) {

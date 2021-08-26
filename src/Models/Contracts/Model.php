@@ -6,5 +6,5 @@ use stdClass;
 
 interface Model extends BaseModel
 {
-    public function __construct(Client $client, ?stdClass $response = null);
+    public function __construct(?stdClass $response = null);
 }
