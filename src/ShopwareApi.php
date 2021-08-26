@@ -27,6 +27,7 @@ class ShopwareApi
     private ClientAuthenticator $clientAuthenticator;
     private Client $httpClient;
     private Connector $connector;
+    public bool $languageEnabled = true;
 
     public function __construct(public string $hostname, string $accessKeyId, string $secretAccessKey, public string $languageId, array $instanceClientOptions = [], ?array $httpClientConfig = null, bool $forceRenewTokens = false)
     {
@@ -156,5 +157,15 @@ class ShopwareApi
     public function getAuthenticator(): ClientAuthenticator
     {
         return $this->clientAuthenticator;
+    }
+
+    public function enableLanguage(): void
+    {
+        $this->languageEnabled = true;
+    }
+
+    public function disableLanguage(): void
+    {
+        $this->languageEnabled = false;
     }
 }

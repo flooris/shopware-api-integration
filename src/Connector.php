@@ -36,13 +36,16 @@ class Connector
                 'Accept'         => 'application/json',
                 'Content-Type'   => 'application/json',
                 'Authorization'  => 'Bearer ' . $this->getShopwareApi()->getAuthenticator()->getBearerToken(),
-                'sw-language-id' => $this->shopwareApi->languageId,
             ],
             RequestOptions::SYNCHRONOUS => true,
             RequestOptions::DEBUG       => false,
         ];
 
         $defaultOptions[RequestOptions::HEADERS] = array_merge($defaultOptions[RequestOptions::HEADERS], $this->instanceClientOptions);
+
+        if ($this->shopwareApi->languageEnabled) {
+            $defaultOptions[RequestOptions::HEADERS]['sw-language-id'] =  $this->shopwareApi->languageId;
+        }
 
         if (! $options) {
             return $defaultOptions;
