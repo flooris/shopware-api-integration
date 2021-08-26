@@ -132,6 +132,11 @@ class ShopwareApi
         return new TagClient($this);
     }
 
+    public function paymentMethod(): PaymentMethodClient
+    {
+        return new PaymentMethodClient($this);
+    }
+
     public function connector(): Connector
     {
         return $this->connector;
