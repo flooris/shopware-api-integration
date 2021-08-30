@@ -47,6 +47,7 @@ class PropertyGroupClient extends AbstractBaseClient
     public function update(string $id, array $changes): PropertyGroupModel
     {
         $response = $this->getShopwareApi()
+            ->enableLanguage()
             ->connector()
             ->patch(
                 $this->showUri(),
@@ -67,6 +68,7 @@ class PropertyGroupClient extends AbstractBaseClient
         }
 
         return $this->getShopwareApi()
+            ->disableLanguage()
             ->connector()
             ->post(
                 $this->baseUri(),

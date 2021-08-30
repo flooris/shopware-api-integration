@@ -19,6 +19,7 @@ use Flooris\ShopwareApiIntegration\Clients\SalesChannelClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductMediaClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyGroupClient;
 use Flooris\ShopwareApiIntegration\Clients\CalculatedTaxClient;
+use Flooris\ShopwareApiIntegration\Clients\PaymentMethodClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductVisibilityClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductFeaturesSetClient;
 
@@ -159,13 +160,17 @@ class ShopwareApi
         return $this->clientAuthenticator;
     }
 
-    public function enableLanguage(): void
+    public function enableLanguage(): ShopwareApi
     {
         $this->languageEnabled = true;
+
+        return $this;
     }
 
-    public function disableLanguage(): void
+    public function disableLanguage(): ShopwareApi
     {
         $this->languageEnabled = false;
+
+        return $this;
     }
 }
