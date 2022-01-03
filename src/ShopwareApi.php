@@ -10,17 +10,20 @@ use Flooris\ShopwareApiIntegration\Clients\OrderClient;
 use Flooris\ShopwareApiIntegration\Clients\SearchClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductClient;
 use Flooris\ShopwareApiIntegration\Clients\CountryClient;
+use Flooris\ShopwareApiIntegration\Clients\TaxRuleClient;
 use Flooris\ShopwareApiIntegration\Clients\CategoryClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyClient;
 use Flooris\ShopwareApiIntegration\Clients\CurrencyClient;
 use Flooris\ShopwareApiIntegration\Clients\CustomerClient;
 use Flooris\ShopwareApiIntegration\Clients\MediaFolderClient;
+use Flooris\ShopwareApiIntegration\Clients\TaxRuleTypeClient;
 use Flooris\ShopwareApiIntegration\Clients\SalesChannelClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductMediaClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyGroupClient;
 use Flooris\ShopwareApiIntegration\Clients\CalculatedTaxClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductVisibilityClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductFeaturesSetClient;
+use Flooris\ShopwareApiIntegration\Clients\PropertyGroupOptionClient;
 
 class ShopwareApi
 {
@@ -33,7 +36,6 @@ class ShopwareApi
     {
         $this->setHttpClient($hostname, $httpClientConfig);
         $this->connector = new Connector($this, $this->httpClient, $instanceClientOptions);
-
         $this->login($accessKeyId, $secretAccessKey, $forceRenewTokens);
     }
 
@@ -61,6 +63,11 @@ class ShopwareApi
     public function propertyGroup(): PropertyGroupClient
     {
         return new PropertyGroupClient($this);
+    }
+
+    public function propertyOption(): PropertyGroupOptionClient
+    {
+        return new PropertyGroupOptionClient($this);
     }
 
     public function productVisibility(): ProductVisibilityClient
@@ -106,6 +113,16 @@ class ShopwareApi
     public function tax(): TaxClient
     {
         return new TaxClient($this);
+    }
+
+    public function taxRuleType(): TaxRuleTypeClient
+    {
+        return new TaxRuleTypeClient($this);
+    }
+
+    public function taxRule(): TaxRuleClient
+    {
+        return new TaxRuleClient($this);
     }
 
     public function calculatedTax(): CalculatedTaxClient
