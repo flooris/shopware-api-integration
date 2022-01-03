@@ -9,13 +9,14 @@ use Flooris\ShopwareApiIntegration\Models\ProductListModel;
 
 class ProductClient extends AbstractBaseClient
 {
-    public function createVariants(array $optionIds, string $productId, int $stock = 0)
+    public function createVariants(array $optionIds, string $productId, int $stock = 0, ?string $sku = null, ?string $id = null)
     {
         $data = $this->getShopwareApi()->connector()->bulk()->update([
             [
+                'id'            => $id,
                 'parentId'      => $productId,
                 'stock'         => $stock,
-                'productNumber' => (string)time(),
+                'productNumber' => $sku ?? (string)time(),
                 'options'       => collect($optionIds)->map(function (string $id) {
                     return ['id' => $id];
                 })->toArray(),
@@ -42,18 +43,17 @@ class ProductClient extends AbstractBaseClient
         )->products(limit: null, paginated: false);
     }
 
-
     public function findBySku(string $searchTerm): ?ProductModel
     {
         $result = $this->getShopwareApi()
             ->search()
             ->products(term: $searchTerm, limit: 1, paginated: false);
 
-        if ($result->isEmpty()) {
+        if ($result?->isEmpty()) {
             return null;
         }
 
-        return $result->first();
+        return $result?->first();
     }
 
     public function modelClass(): string
@@ -103,12 +103,12 @@ class ProductClient extends AbstractBaseClient
         string $name,
         string $description,
         string $sku,
-        int    $grossPrice,
-        ?int   $netPrice,
+        int $grossPrice,
+        ?int $netPrice,
         string $currencyId,
         string $taxId,
-        int    $stock = 1,
-        array  $rawProductData = [],
+        int $stock = 1,
+        array $rawProductData = [],
     )
     {
         $linkedprices = $netPrice === null;
@@ -139,7 +139,7 @@ class ProductClient extends AbstractBaseClient
         ]);
         $response = $response->data ?? $response;
 
-        return new $this->modelClass($this, $response);
+        return new $this->modelClass($response);
     }
 
     public function updateCategory(Collection $products, Collection $categories): stdClass
@@ -206,6 +206,6 @@ class ProductClient extends AbstractBaseClient
             ->connector()
             ->patch($this->showUri(), $changes, [$id], ['_response' => true]);
 
-        return new $this->modelClass($this, $response);
+        return new $this->modelClass($response);
     }
 }

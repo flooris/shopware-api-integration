@@ -8,8 +8,8 @@ class MediaModel extends AbstractModel
 {
     public string $id;
     private string $url;
-    private ?string $fileName;
-    private ?string $fileExtension;
+    public ?string $fileName;
+    public ?string $fileExtension;
 
     public function handleResponse(stdClass $response): void
     {

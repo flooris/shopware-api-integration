@@ -12,11 +12,11 @@ class CalculatedTaxClient
         $this->setModelClass($modelClass);
     }
 
-    public function calculateNetPrice(string $currencyId, float|int $grossPrice, string $taxId): CalculatedPriceModel
+    public function calculatePrice(string $currencyId, float|int $grossPrice, string $taxId, string $output = 'gross'): CalculatedPriceModel
     {
         return new $this->modelClass($this->getShopwareApi()->connector()->post($this->baseUri(), [
             'currencyId' => $currencyId,
-            'output'     => 'gross',
+            'output'     => $output,
             'price'      => $grossPrice,
             'taxId'      => $taxId,
         ]));

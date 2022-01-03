@@ -10,6 +10,7 @@ class ProductModel extends AbstractModel
     public string $id;
     public string $versionId;
     public ?string $parentId;
+    public ?string $taxId;
     public string $sku;
     public ?string $name;
     public ?string $description;
@@ -21,6 +22,7 @@ class ProductModel extends AbstractModel
     public $featureSet;
     public ?string $featureSetId;
     public ?array $optionIds;
+    public ?array $options;
     public ?array $categoryTree;
     public ?array $categories;
     public ?array $tagIds;
@@ -31,6 +33,7 @@ class ProductModel extends AbstractModel
         $this->id                   = $response->id;
         $this->versionId            = $response->versionId;
         $this->parentId             = $response->parentId;
+        $this->taxId                = $response->taxId;
         $this->sku                  = $response->productNumber;
         $this->name                 = $response->name ?? $response->translated?->name;
         $this->description          = $response->description ?? $response->translated?->description;
@@ -40,61 +43,10 @@ class ProductModel extends AbstractModel
         $this->properties           = $response->properties ?? [];
         $this->customFields         = $response->customFields ? (array)$response->customFields : (array)$response->translated?->customFields;
         $this->optionIds            = $response->optionIds;
+        $this->options              = $response->options;
         $this->categoryTree         = $response->categoryTree;
         $this->categories           = $response->categories;
         $this->tagIds               = $response->tagIds;
         $this->tags                 = $response->tags;
-        $this->mapProperties();
-        $this->setCurrency($response);
-    }
-
-    private function mapProperties(): void
-    {
-        if (empty($this->properties)) {
-            return;
-        }
-
-        $propsWithOptions = $this->getClient()
-            ->getShopwareApi()
-            ->search()
-            ->properties(limit: null, paginated: false);
-
-        $this->properties = array_map(function ($prop) use ($propsWithOptions) {
-            $property = $propsWithOptions->firstWhere('id', $prop->groupId);
-            if ($property) {
-                return (object)[
-                    'groupId'  => $prop->groupId,
-                    'optionId' => $prop->id,
-                    'name'     => $property->name,
-                    'value'    => $prop->name,
-                ];
-            }
-        }, $this->properties);
-    }
-
-    private function setCurrency(stdClass $response): void
-    {
-        $currency = $this->getClient()->getShopwareApi()->search()->currency(limit: null, paginated: false);
-
-        if (isset($response->price)) {
-            $this->prices = collect($response->price)->map(function ($price) use ($currency) {
-                $currency = $currency->firstWhere('id', $price->currencyId);
-
-                return (object)[
-                    'currency'  => $currency,
-                    'salePrice' => $price->gross,
-                ];
-            })->toArray();
-        }
-
-        if (empty($this->prices)) {
-            if (! $this->parentId) {
-                return;
-            }
-            $parentProduct = $this->getClient()->find($this->parentId);
-            if ($parentProduct) {
-                $this->prices = $parentProduct->prices;
-            }
-        }
     }
 }

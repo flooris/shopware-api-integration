@@ -45,7 +45,7 @@ class ProductMediaClient extends AbstractBaseClient
 
     public function addProductImage(string $productId, string $mediaId): ProductMediaModel
     {
-        return new $this->modelClass($this, $this->getShopwareApi()->connector()->post($this->baseUri(), [
+        return new $this->modelClass($this->getShopwareApi()->connector()->post($this->baseUri(), [
             'productId' => $productId,
             'mediaId'   => $mediaId,
         ], [], ['_response' => true]));
