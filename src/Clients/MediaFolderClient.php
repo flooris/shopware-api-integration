@@ -45,7 +45,7 @@ class MediaFolderClient extends AbstractBaseClient
     }
 
     //todo improve addImageToMediaFolder
-    public function addImageToMediaFolder(string $folderId, ?string $filename = null, ?string $image = null, ?string $url = null)
+    public function addImageToMediaFolder(string $folderId, ?string $filename = null, ?string $image = null, ?string $url = null, ?string $id = null)
     {
         if (! $filename && ! $image && ! $url) {
             throw new Exception('at least provide a image with a filename or provide a valid image url');
@@ -56,7 +56,18 @@ class MediaFolderClient extends AbstractBaseClient
             $image    = file_get_contents($url);
         }
 
-        $mediaItem = $this->getShopwareApi()->media()->createMediaItem($folderId);
+        $foundMedia = $this->getShopwareApi()->search()->media(term: (string)$filename, paginated: false)->first();
+
+        if ($foundMedia && $foundMedia->fileName === str_replace(".{$foundMedia->fileExtension}", '', $filename)) {
+            throw new Exception('filename is already in use', 500);
+        }
+
+
+        ! $id
+            ? $mediaItem = $this->getShopwareApi()->media()->createMediaItem($folderId)
+            : $mediaItem = $this->getShopwareApi()->media()->createMediaItem($folderId, $id);
+
+
         $this->getShopwareApi()->media()->upload($mediaItem->id, $image, $filename);
 
         return $mediaItem;

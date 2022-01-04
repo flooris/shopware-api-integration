@@ -10,6 +10,7 @@ class ProductListModel extends AbstractModel
     public string $id;
     public string $versionId;
     public ?string $parentId;
+    public ?string $taxId;
     public string $sku;
     public ?string $name;
     public ?string $description;
@@ -31,6 +32,7 @@ class ProductListModel extends AbstractModel
         $this->customFields         = (array)$response->customFields;
         $this->categories           = $response->categories;
         $this->optionIds            = $response->optionIds;
+        $this->taxId                = $response->taxId;
     }
 
     public function product(): Contracts\Model

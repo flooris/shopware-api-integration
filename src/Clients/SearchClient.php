@@ -207,6 +207,24 @@ class SearchClient
         );
     }
 
+    public function propertyGroupOptions(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $client = $this->shopwareApi->propertyOption();
+
+        return $this->sendRequest(
+            $term,
+            $client->modelClass(),
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+    }
+
+
     public function currency(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $client = $this->shopwareApi->currency();
@@ -321,6 +339,40 @@ class SearchClient
     public function tax(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $client = $this->shopwareApi->tax();
+
+        return $this->sendRequest(
+            $term,
+            $client->modelClass(),
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+    }
+
+    public function taxRule(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $client = $this->shopwareApi->taxRule();
+
+        return $this->sendRequest(
+            $term,
+            $client->modelClass(),
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+    }
+
+    public function taxRuleType(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $client = $this->shopwareApi->taxRuleType();
 
         return $this->sendRequest(
             $term,

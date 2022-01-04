@@ -83,7 +83,7 @@ class PaymentMethodClient extends AbstractBaseClient
         ]);
         $response = $response->data ?? $response;
 
-        return new $this->modelClass($this, $response);
+        return new $this->modelClass($response);
     }
 
     public function updateCategory(Collection $products, Collection $categories): stdClass
@@ -113,6 +113,6 @@ class PaymentMethodClient extends AbstractBaseClient
             ->connector()
             ->patch($this->showUri(), $changes, [$id], ['_response' => true]);
 
-        return new $this->modelClass($this, $response);
+        return new $this->modelClass($response);
     }
 }

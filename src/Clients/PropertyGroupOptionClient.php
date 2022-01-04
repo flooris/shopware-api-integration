@@ -5,55 +5,48 @@ namespace Flooris\ShopwareApiIntegration\Clients;
 use stdClass;
 use Illuminate\Support\Collection;
 use Flooris\ShopwareApiIntegration\Models\PropertyModel;
+use Flooris\ShopwareApiIntegration\Models\PropertyOptionModel;
 
-class PropertyClient extends AbstractBaseClient
+class PropertyGroupOptionClient extends AbstractBaseClient
 {
     public function modelClass(): string
     {
-        return PropertyModel::class;
+        return PropertyOptionModel::class;
     }
 
     public function baseUri(): string
     {
-        return 'property-group';
+        return 'property-group-option';
     }
 
     public function showUri(): string
     {
-        return 'property-group/%s/options/%s';
+        return 'property-group-option/%s';
     }
 
     public function createUri(): string
     {
-        return 'property-group/%s/options';
+        return 'property-group-option/%s';
     }
 
     public function listModelClass(): string
     {
-        return PropertyModel::class;
+        return PropertyOptionModel::class;
     }
 
     public function associations(): ?array
     {
-        return ['options'];
+        return [];
     }
 
     public function list($limit = 25, $page = 1): stdClass
     {
-        return $this->getShopwareApi()->search()->properties(limit: $limit, page: $page);
+        return $this->getShopwareApi()->search()->propertyGroupOptions(limit: $limit, page: $page);
     }
 
     public function all(): Collection
     {
-        return $this->getShopwareApi()->search()->properties(limit: null, paginated: false);
-    }
-
-    public function findByOptionId(string $id): Collection|stdClass
-    {
-        return $this->getShopwareApi()
-            ->search()
-            ->addFilter('propertyGroup.options.id', 'equalsAny', $id)
-            ->propertyGroups();
+        return $this->getShopwareApi()->search()->propertyGroupOptions(limit: null, paginated: false);
     }
 
     public function update(string $groupId, string $id, array $changes): PropertyModel

@@ -60,14 +60,17 @@ class MediaClient extends AbstractBaseClient
             ]);
     }
 
-    public function createMediaItem(string $mediaFolderId)
+    public function createMediaItem(string $mediaFolderId, ?string $mediaId = null): MediaModel
     {
+        $json = $mediaId ? [
+            'mediaFolderId' => $mediaFolderId,
+            'id'            => $mediaId,
+        ] : [
+            'mediaFolderId' => $mediaFolderId,
+        ];
+
         return new $this->modelClass(
-            $this,
-            $this->getShopwareApi()->connector()->post($this->baseUri(), [
-                'mediaFolderId' => $mediaFolderId,
-            ], [], ['_response' => true,]
-            )->data,
+            $this->getShopwareApi()->connector()->post($this->baseUri(), $json, [], ['_response' => true,])->data,
         );
     }
 

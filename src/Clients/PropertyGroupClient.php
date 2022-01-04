@@ -55,7 +55,7 @@ class PropertyGroupClient extends AbstractBaseClient
                 ['_response' => true]
             );
 
-        return new $this->modelClass($this, $response);
+        return new $this->modelClass($response);
     }
 
     public function create(string $name, ?string $id = null)
