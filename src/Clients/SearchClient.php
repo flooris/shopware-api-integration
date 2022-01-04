@@ -4,7 +4,6 @@ namespace Flooris\ShopwareApiIntegration\Clients;
 
 use stdClass;
 use Illuminate\Support\Collection;
-use Flooris\ShopwareApiIntegration\Connector;
 use Flooris\ShopwareApiIntegration\ShopwareApi;
 use Flooris\ShopwareApiIntegration\Models\Contracts\Client;
 
@@ -390,6 +389,40 @@ class SearchClient
     public function tag(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $client = $this->shopwareApi->tag();
+
+        return $this->sendRequest(
+            $term,
+            $client->modelClass(),
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+    }
+
+    public function language(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $client = $this->shopwareApi->language();
+
+        return $this->sendRequest(
+            $term,
+            $client->modelClass(),
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+    }
+
+    public function locale(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
+    {
+        $client = $this->shopwareApi->locale();
 
         return $this->sendRequest(
             $term,

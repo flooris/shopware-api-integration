@@ -8,6 +8,7 @@ use Flooris\ShopwareApiIntegration\Clients\TagClient;
 use Flooris\ShopwareApiIntegration\Clients\MediaClient;
 use Flooris\ShopwareApiIntegration\Clients\OrderClient;
 use Flooris\ShopwareApiIntegration\Clients\SearchClient;
+use Flooris\ShopwareApiIntegration\Clients\LocaleClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductClient;
 use Flooris\ShopwareApiIntegration\Clients\CountryClient;
 use Flooris\ShopwareApiIntegration\Clients\TaxRuleClient;
@@ -15,6 +16,7 @@ use Flooris\ShopwareApiIntegration\Clients\CategoryClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyClient;
 use Flooris\ShopwareApiIntegration\Clients\CurrencyClient;
 use Flooris\ShopwareApiIntegration\Clients\CustomerClient;
+use Flooris\ShopwareApiIntegration\Clients\LanguageClient;
 use Flooris\ShopwareApiIntegration\Clients\MediaFolderClient;
 use Flooris\ShopwareApiIntegration\Clients\TaxRuleTypeClient;
 use Flooris\ShopwareApiIntegration\Clients\SalesChannelClient;
@@ -149,6 +151,16 @@ class ShopwareApi
     public function tag(): TagClient
     {
         return new TagClient($this);
+    }
+
+    public function language(): LanguageClient
+    {
+        return new LanguageClient($this);
+    }
+
+    public function locale(): LocaleClient
+    {
+        return new LocaleClient($this);
     }
 
     public function paymentMethod(): PaymentMethodClient

@@ -117,7 +117,8 @@ class ProductClient extends AbstractBaseClient
         if (! $netPrice) {
             $netPrice = $this->getShopwareApi()
                 ->calculatedTax()
-                ->calculatePrice($currencyId, $grossPrice, $taxId)->priceWithoutTax;
+                ->calculatePrice($currencyId, $grossPrice, $taxId)
+                ->priceWithoutTax;
         }
 
         $response = $this->getShopwareApi()->connector()->post($this->baseUri(), array_merge([
