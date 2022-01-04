@@ -27,6 +27,7 @@ class ProductModel extends AbstractModel
     public ?array $categories;
     public ?array $tagIds;
     public ?array $tags;
+    public ?array $translations;
 
     public function handleResponse(stdClass $response): void
     {
@@ -48,5 +49,6 @@ class ProductModel extends AbstractModel
         $this->categories           = $response->categories;
         $this->tagIds               = $response->tagIds;
         $this->tags                 = $response->tags;
+        $this->translations         = $response->translations;
     }
 }

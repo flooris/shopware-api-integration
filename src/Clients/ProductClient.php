@@ -86,6 +86,7 @@ class ProductClient extends AbstractBaseClient
             'prices',
             'properties',
             'visibilities',
+            'translations'
         ];
     }
 
