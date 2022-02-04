@@ -86,6 +86,7 @@ class ProductClient extends AbstractBaseClient
             'prices',
             'properties',
             'visibilities',
+            'translations',
         ];
     }
 
@@ -102,28 +103,28 @@ class ProductClient extends AbstractBaseClient
     public function create(
         string $name,
         string $description,
-        string $sku,
-        int $grossPrice,
-        ?int $netPrice,
+        string $productNumber,
+        int    $grossPrice,
+        ?int   $netPrice,
         string $currencyId,
         string $taxId,
-        int $stock = 1,
-        array $rawProductData = [],
+        int    $stock = 1,
+        array  $rawProductData = [],
     )
     {
         $linkedprices = $netPrice === null;
 
-        if ($netPrice === null) {
+        if (! $netPrice) {
             $netPrice = $this->getShopwareApi()
                 ->calculatedTax()
-                ->calculateNetPrice($currencyId, $grossPrice, $taxId)->priceWithoutTax;
+                ->calculatePrice($currencyId, $grossPrice, $taxId)->priceWithoutTax;
         }
 
         $response = $this->getShopwareApi()->connector()->post($this->baseUri(), array_merge([
             'name'          => $name,
             'description'   => $description,
             'active'        => true,
-            'productNumber' => $sku,
+            'productNumber' => $productNumber,
             'stock'         => $stock,
             'taxId'         => $taxId,
             'price'         => [
