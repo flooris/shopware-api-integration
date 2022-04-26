@@ -60,7 +60,7 @@ class PaymentMethodClient extends AbstractBaseClient
         if ($netPrice === null) {
             $netPrice = $this->getShopwareApi()
                 ->calculatedTax()
-                ->calculateNetPrice($currencyId, $grossPrice, $taxId)->priceWithoutTax;
+                ->calculatePrice($currencyId, $grossPrice, $taxId)->priceWithoutTax;
         }
 
         $response = $this->getShopwareApi()->connector()->post($this->baseUri(), array_merge([
