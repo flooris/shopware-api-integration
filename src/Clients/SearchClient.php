@@ -76,6 +76,27 @@ class SearchClient
         return $response;
     }
 
+    public function manufacturers(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass|null
+    {
+        $client = $this->shopwareApi->manufacturers();
+
+        $modelClass = ($limit === 1) ? $client->modelClass() : $client->ListModelClass();
+
+        $response = $this->sendRequest(
+            $term,
+            $modelClass,
+            $client,
+            $limit,
+            $page,
+            $ids,
+            $sortField,
+            $sortOrder,
+            $paginated,
+        );
+
+        return $response;
+    }
+
     public function productVisibility(?string $term = null, ?int $limit = 25, int $page = 1, ?string $ids = null, ?string $sortField = null, ?string $sortOrder = null, bool $paginated = true): Collection|stdClass
     {
         $client = $this->shopwareApi->productVisibility();

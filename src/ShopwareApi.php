@@ -51,6 +51,11 @@ class ShopwareApi
         return new ProductClient($this);
     }
 
+    public function manufacturers(): ManufactureClient
+    {
+        return new ManufactureClient($this);
+    }
+
     public function productFeatureSet(): ProductFeaturesSetClient
     {
         return new ProductFeaturesSetClient($this);
