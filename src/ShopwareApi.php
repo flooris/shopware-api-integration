@@ -17,6 +17,7 @@ use Flooris\ShopwareApiIntegration\Clients\CurrencyClient;
 use Flooris\ShopwareApiIntegration\Clients\CustomerClient;
 use Flooris\ShopwareApiIntegration\Clients\MediaFolderClient;
 use Flooris\ShopwareApiIntegration\Clients\TaxRuleTypeClient;
+use Flooris\ShopwareApiIntegration\Clients\ManufactureClient;
 use Flooris\ShopwareApiIntegration\Clients\SalesChannelClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductMediaClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyGroupClient;
