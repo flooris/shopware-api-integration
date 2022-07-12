@@ -37,7 +37,7 @@ class ManufactureClient extends AbstractBaseClient
 
     public function list($limit = 25, $page = 1): stdClass
     {
-        return $this->getShopwareApi()->search()->products(limit: $limit, page: $page);
+        return $this->getShopwareApi()->search()->manufacturers(limit: $limit, page: $page);
     }
 
     public function all(): Collection
