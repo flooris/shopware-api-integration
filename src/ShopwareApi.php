@@ -21,6 +21,7 @@ use Flooris\ShopwareApiIntegration\Clients\SalesChannelClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductMediaClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyGroupClient;
 use Flooris\ShopwareApiIntegration\Clients\CalculatedTaxClient;
+use Flooris\ShopwareApiIntegration\Clients\PaymentMethodClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductVisibilityClient;
 use Flooris\ShopwareApiIntegration\Clients\ProductFeaturesSetClient;
 use Flooris\ShopwareApiIntegration\Clients\PropertyGroupOptionClient;
