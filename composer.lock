@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76996dee5b03e3ac7c0d6bdd87f76197",
+    "content-hash": "011d4547f0c1c05f7ff248603f4eb762",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -432,16 +432,16 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v9.19.0",
+            "version": "v9.52.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
-                "reference": "d2dc74fdcc89239e1910a8d08b2b2e5ad26a043c"
+                "reference": "92baa45cede73bc2ad8a0a193f9cb3f8bde676a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/config/zipball/d2dc74fdcc89239e1910a8d08b2b2e5ad26a043c",
-                "reference": "d2dc74fdcc89239e1910a8d08b2b2e5ad26a043c",
+                "url": "https://api.github.com/repos/illuminate/config/zipball/92baa45cede73bc2ad8a0a193f9cb3f8bde676a9",
+                "reference": "92baa45cede73bc2ad8a0a193f9cb3f8bde676a9",
                 "shasum": ""
             },
             "require": {
@@ -476,7 +476,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-02-01T16:16:50+00:00"
+            "time": "2022-08-08T17:13:46+00:00"
         },
         {
             "name": "illuminate/contracts",
@@ -959,5 +959,5 @@
         "ext-exif": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
