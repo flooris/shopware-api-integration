@@ -33,7 +33,6 @@ class CustomerClient extends AbstractBaseClient
         return [
             'addresses',
             'defaultBillingAddress',
-            'defaultPaymentMethod',
             'defaultShippingAddress',
             'group',
             'lastPaymentMethod',
